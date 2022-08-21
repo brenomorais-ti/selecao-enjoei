@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import vInstructions from '@/pages/instructions.vue'
-import vCatalog from '@/pages/catalog.vue'
+import Instructions from '@/pages/Instructions.vue'
+import Catalog from '@/pages/Catalog.vue'
 
 Vue.use(VueRouter)
 
@@ -9,12 +9,12 @@ const routes = [
   {
     path: '/',
     name: 'Instructions',
-    component: vInstructions
+    component: Instructions
   },
   {
-    path: '/busca',
+    path: '/catalogo',
     name: 'Catalog',
-    component: vCatalog
+    component: Catalog
   }
 ]
 

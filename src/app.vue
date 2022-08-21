@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <vContainer :gutter="true">
+    <Container :gutter="true">
       <RouterView />
-    </vContainer>
+    </Container>
   </div>
 </template>
 
 <script>
-  import vContainer from '@/components/container.vue'
+  import Container from '@/components/Container.vue'
 
   export default {
     components: {
-      vContainer
+      Container
     }
   }
 </script>

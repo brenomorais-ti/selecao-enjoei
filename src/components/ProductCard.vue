@@ -13,9 +13,9 @@
     </div>
 
     <div class="c-product-card__price">
-      <span v-if="haveDiscount" style ="color: var(--color-pink)">R$ {{ showPrice }}</span>
       <span v-if="!haveDiscount">R$ {{ showPrice }}</span>
-      <span v-if="haveDiscount" class="c-product-card__price-discount"> <s>R$ {{ valueShowDiscount }} </s></span>
+      <span v-if="haveDiscount" class="c-product-card__price-discount">R$ {{ valueShowDiscount }}</span>
+      <span v-if="haveDiscount" class="c-product-card__old-price"> <s>R$ {{ showPrice }} </s></span>
     </div>
   </a>
 </template>
@@ -114,12 +114,14 @@
     justify-content: center;
     align-items: center;
   }
-  .c-product-card__price-discount{
+  .c-product-card__old-price {
     color: var(--color-gray-4);
     font-family: 'Proxima Nova';
     font-weight: var(--font-weight-regular);
     font-size: 12px;
     margin: 4px;
   }
-
+  .c-product-card__price-discount{
+    color: var(--color-pink)
+  }
 </style>

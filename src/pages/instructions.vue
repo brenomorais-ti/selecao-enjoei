@@ -82,7 +82,7 @@
       </p>
 
       <p>
-        ficamos gratos pelo seu esforço e desejamos muita sorte. <router-link to="/busca">abrir página do teste e começar.</router-link>
+        ficamos gratos pelo seu esforço e desejamos muita sorte. <router-link to="/catalogo">abrir página do teste e começar.</router-link>
       </p>
     </div>
 
