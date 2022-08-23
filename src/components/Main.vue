@@ -1,6 +1,6 @@
 <template>
      <div class="c-main">
-       <div class="c-main__grid">
+        <div class="c-main__grid">
             <slot />
         </div>
    </div>
@@ -8,7 +8,7 @@
 
 <style scoped>
     .c-main {
-        padding-top: 90px;
+        padding-top: 24px;
         width: 100%;
     }
 

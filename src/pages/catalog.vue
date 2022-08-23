@@ -1,10 +1,15 @@
 <template>
   <div class="p-catalog">
     <Header />
-      <div class="p-catalog__search">
-        <input v-model="item" class="p-catalog__search-input" type="text" name="search" placeholder="Busca" />
-        <button class="p-catalog__search-button" type="submit" v-on:click="fetchItem"> <img class="p-catalog__search-button-search" :src="search"/></button>
+    <div class="p-bar">
+      <div class="p-bar__search">
+        <div class="p-bar__search-result">
+          <p v-if="quantityProducts!=''"> {{ quantityProducts }} produtos encontrados</p>
+        </div>
+        <Input v-model="item" @click="fetchItem"/>
       </div>
+    </div>
+
     <Main>
       <ProductCard 
         v-for="(product, index) in products" 
@@ -32,14 +37,15 @@ import Main from '../components/Main.vue'
 import ProductCard from '../components/ProductCard.vue'
 import rigth from '../assets/arrow-right-icon.svg'
 import left from '../assets/arrow-left-icon.svg'
-import search from '../assets/search-icon.svg'
+import Input from '../components/Input.vue'
 
   export default {
   components: {
     ProductCard,
     Header,
-    Main
-  },
+    Main,
+    Input
+},
   pageTitle() {
     return 'Catalgo'
   },
@@ -47,47 +53,47 @@ import search from '../assets/search-icon.svg'
     return {
       products: [],
       paginations: [],
-      number: 1,
+      quantityProducts: '',
+      page: 1,
       item: '',
       rigth,
-      left,
-      search
+      left
     }
   },
   watch: {
-    number(value) {
+    page(value) {
       this.getData(value)
     }
   },
   methods: {
     next(e) {
-      this.number = this.pagination.next_page
+      this.page = this.pagination.next_page
     },
     previous(e) {
-      this.number = this.pagination.prev_page
+      this.page = this.pagination.prev_page
     },
     async fetchItem(e) {
-      await this.getData(this.number, this.item)
+      await this.getData(this.page, this.item)
+      this.quantityProducts=this.pagination.total_entries
     },
-    async requestData(number, item) {
+    async requestData(page, item) {
       try {
         const response = await axios 
-          .get(`/api/v5/users/enjoei-pro/products/liked?page=${number}&query=${item}`)
+          .get(`/api/v5/users/enjoei-pro/products/liked?page=${page}&query=${item}`)
         return response.data
       } catch (error){
         console.log(error)
       }
     },
-    async getData(number, item) {
-      const response = await this.requestData(number, item)
+    async getData(page, item) {
+      const response = await this.requestData(page, item)
       this.products = response.products
       this.pagination = response.pagination
-      console.log(this.pagination)
-      console.log(this.item)
+      console.log(this.pagination.total_entries)
     }
   },
   mounted() {
-   this.getData(this.number, this.item)
+   this.getData(this.page, this.item)
   }
 }
 </script>
@@ -97,47 +103,25 @@ import search from '../assets/search-icon.svg'
     height: 100vh;
   }
 
-  .p-catalog__search {
+  .p-bar {
+    width: 100%;
+  }
+
+  .p-bar__search {
+    max-width: 1200px;
     display: flex;
-    border: 1px solid var(--color-gray-2);
-    width: 240px;
-    height: 42px;
-    border-radius: 4px;
-    position: absolute;
-    left: 1104px;
-    top: 94px;
+    align-items: center;
+    justify-content: space-between;
+    margin: auto;
   }
 
-  .p-catalog__search-button{
-    position: absolute;
-    border-color: var(--color-white);
-    background-color: var(--color-white);
-    border: 0px;
-    padding-top: 8px;
-    left: 199px;
-  }
-
-  .p-catalog__search-button :active {
-    opacity: 0.4;
-  }
-
-  .p-catalog__search-input{
-    position: absolute;
-    margin-top: 7px;
-    left: 12px;
-    background-color: var(--color-white);
-    border: 0px;
+  .p-bar__search-result{
+    padding-top: 36;
     font-family: 'Proxima Nova';
     font-weight: var(--font-weight-extra-bold);
-    color: #CAC7C5;
-    outline: 0;
+    color: var(--color-gray-5);
   }
 
-  .p-catalog__search-button-search{
-    width: 25px;
-    height: 25px;
-    display: flex;
-  }
   .p-catalog__navigation {
     margin: 0px;
     display: flex;
@@ -165,66 +149,62 @@ import search from '../assets/search-icon.svg'
     font-size: 16px;
   }
 
-   .p-catalog__navigation-nav-left {
-      color: var(--color-gray-3);
-      margin-right: 12px;
-   }
+  .p-catalog__navigation-nav-left {
+    color: var(--color-gray-3);
+    margin-right: 12px;
+  }
 
-    .p-catalog__navigation-nav-right {
-      color: var(--color-pink);
-      margin-left: 12px;
-   }
+  .p-catalog__navigation-nav-right {
+    color: var(--color-pink);
+    margin-left: 12px;
+  }
 
-   .p-catalog__navigation-nav-left p {
-      margin-left: 51px;
-      position: absolute;
-   }
+  .p-catalog__navigation-nav-left p {
+    margin-left: 51px;
+    position: absolute;
+  }
 
-   .p-catalog__navigation-nav-right p {
-      margin-left: 24px;
-      position: absolute;
-   }
+  .p-catalog__navigation-nav-right p {
+    margin-left: 24px;
+    position: absolute;
+  }
 
-   .p-catalog__navigation-nav-left-arrow {
-      width: 19px;
-      height: 13px;
-      margin-left: 26px;
-      position: absolute;
-   }
+  .p-catalog__navigation-nav-left-arrow {
+    width: 19px;
+    height: 13px;
+    margin-left: 26px;
+    position: absolute;
+  }
 
-    .p-catalog__navigation-nav-right-arrow {
-      width: 19px;
-      height: 13px;
-      margin-left: 90px;
-      position: absolute;
-   }
+  .p-catalog__navigation-nav-right-arrow {
+    width: 19px;
+    height: 13px;
+    margin-left: 90px;
+    position: absolute;
+  }
 
-    .p-catalog__navigation-nav button:active {
-      background-color: var(--color-gray-2);
-      border-color: var(--color-gray-3);
+  .p-catalog__navigation-nav button:active {
+    background-color: var(--color-gray-2);
+    border-color: var(--color-gray-3);
+  }
+
+  @media (max-width: 699px){
+    .p-bar__search {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+    .p-catalog__search-button{
+      left: 296px;
+    }
+    .p-catalog__navigation-nav-left {
+      margin-right: 36px;
     }
 
-    @media (max-width: 699px){
-      .p-catalog__search {
-        width: 335px;
-        height: 42px;
-        border-radius: 4px;
-        position: absolute;
-        left: 100px;
-        top: 94px;
-      }
-      .p-catalog__search-button{
-        left: 296px;
-      }
-      .p-catalog__navigation-nav-left {
-        margin-right: 36px;
-      }
-
-      .p-catalog__navigation-nav-right {
-        margin-left: 36px;
-      }
-      
-    } 
+    .p-catalog__navigation-nav-right {
+      margin-left: 36px;
+    }
+    
+  } 
 
 </style>
 
