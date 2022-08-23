@@ -8,7 +8,7 @@
 
 <style scoped>
     .c-main {
-        padding-top: 24px;
+        padding-top: 90px;
         width: 100%;
     }
 
